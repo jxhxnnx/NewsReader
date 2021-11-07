@@ -1,16 +1,12 @@
 package at.technikum_wien.if19b173.newsreader
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material.icons.outlined.Image
@@ -18,15 +14,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import at.technikum_wien.if19b173.newsreader.viewModel.NewsViewModel
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -36,9 +30,11 @@ import kotlinx.serialization.json.Json
 @DelicateCoroutinesApi
 @Composable
 fun MainView(navController: NavController, viewModel: NewsViewModel) {
-    val content by viewModel.outputText.observeAsState()
+    val content by viewModel.items.observeAsState()
     var expanded  by remember { mutableStateOf(false) }
     val displayImage by viewModel.displayImages.observeAsState()
+    val errorMsg by viewModel.errorMsg.observeAsState()
+    val err by viewModel.err.observeAsState()
 
     Column{
         TopAppBar(
@@ -59,7 +55,7 @@ fun MainView(navController: NavController, viewModel: NewsViewModel) {
                             Text(stringResource(R.string.settings))
                         }
                         DropdownMenuItem(onClick = {
-                            viewModel.reload()
+                            viewModel.reloadData()
                         }) {
                             Text(stringResource(R.string.reload))
                         }
@@ -67,6 +63,9 @@ fun MainView(navController: NavController, viewModel: NewsViewModel) {
                 }
             }
         )
+        if(err == true){
+            Text(text = errorMsg ?: "")
+        }
 
         LazyColumn(
             Modifier
@@ -101,7 +100,11 @@ fun MainView(navController: NavController, viewModel: NewsViewModel) {
                                     Column(
                                         modifier = Modifier
                                             .align(Alignment.BottomEnd)
-                                            .background(androidx.compose.ui.graphics.Color.DarkGray.copy(alpha = 0.6f))
+                                            .background(
+                                                androidx.compose.ui.graphics.Color.DarkGray.copy(
+                                                    alpha = 0.6f
+                                                )
+                                            )
                                             .padding(8.dp)
                                     ) {
                                         Text(

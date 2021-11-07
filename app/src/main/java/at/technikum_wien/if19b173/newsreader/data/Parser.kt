@@ -1,9 +1,11 @@
-package at.technikum_wien.if19b173.newsreader
+package at.technikum_wien.if19b173.newsreader.data
 
 
 import android.util.Xml
 import android.widget.Toast
 import androidx.core.text.HtmlCompat
+import at.technikum_wien.if19b173.newsreader.MainActivity
+import at.technikum_wien.if19b173.newsreader.models.NewsItem
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException

@@ -9,19 +9,22 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModelProvider
 import at.technikum_wien.if19b173.newsreader.ui.theme.NewsReaderTheme
+import at.technikum_wien.if19b173.newsreader.viewModel.NewsViewModel
+import at.technikum_wien.if19b173.newsreader.viewModel.NewsViewModelFactory
 import kotlinx.coroutines.DelicateCoroutinesApi
-import java.util.prefs.Preferences
 
 @DelicateCoroutinesApi
 class MainActivity : ComponentActivity() {
-    private lateinit var viewModel: NewsViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, ViewModelFactory(UserPreferencesRepository(dataStore))).get(NewsViewModel::class.java)
+        val viewModel =
+            ViewModelProvider(this,
+                NewsViewModelFactory(
+                    UserPreferencesRepository(dataStore),
+                    this.application
+                ))[NewsViewModel::class.java]
         setContent {
             NewsReaderTheme {
                 // A surface container using the 'background' color from the theme

@@ -1,14 +1,13 @@
 package at.technikum_wien.if19b173.newsreader
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import at.technikum_wien.if19b173.newsreader.viewModel.NewsViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
